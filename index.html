@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ulike Campaign</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            width: 85%;
+            max-width: 400px;
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        h2 { font-size: 1.2rem; margin-bottom: 20px; }
+        .text-box {
+            background: #f1f3f5;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            text-align: left;
+            border: 1px dashed #dee2e6;
+        }
+        .btn {
+            background-color: #000;
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.98); }
+        .hint {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #868e96;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>分享活动投稿</h2>
+        
+        <div class="text-box" id="copyText">
+            Ulike GA出展キャンペーン<br>#WeLikeUlike
+        </div>
+
+        <button class="btn" onclick="copyAndJump()">复制并跳转投稿</button>
+        
+        <p class="hint">点击按钮后，在Instagram粘贴即可</p>
+    </div>
+
+    <script>
+        function copyAndJump() {
+            // 待复制的文案（处理换行符）
+            const textToCopy = "Ulike GA出展キャンペーン\n#WeLikeUlike";
+            
+            // 使用现代 API 复制
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    handleSuccess();
+                });
+            } else {
+                // 备选方案：传统复制方法
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    handleSuccess();
+                } catch (err) {
+                    alert('复制失败，请长按手动复制');
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function handleSuccess() {
+            alert("✅ 文案已复制到剪贴板！\n即将为你打开 Instagram");
+            
+            // 延迟一秒跳转，确保用户看清提示
+            setTimeout(() => {
+                // 唤起 Instagram 相机界面
+                window.location.href = "instagram://camera";
+                
+                // 兜底逻辑：如果用户没装 App，3秒后跳转网页版
+                setTimeout(() => {
+                    if (!document.hidden) {
+                        window.location.href = "https://www.instagram.com/";
+                    }
+                }, 3000);
+            }, 500);
+        }
+    </script>
+</body>
+</html>
